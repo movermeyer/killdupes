@@ -3,6 +3,8 @@
 # Author: Martin Matusiak <numerodix@gmail.com>
 # Licensed under the GNU Public License, version 3.
 #
+# <desc> Kill duplicate files, finding partial files as well </desc>
+#
 # revision 3 - Sort by smallest size before reading files in bucket
 # revision 2 - Add dashboard display
 # revision 1 - Add total byte count
