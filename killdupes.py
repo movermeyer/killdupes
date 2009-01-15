@@ -49,15 +49,19 @@ def format_file(filename):
     return ("%s  %s  %s" % 
           (format_size(st.st_size), format_date(st.st_mtime), filename))
 
-def write(s):
+def write_out(s):
     sys.stdout.write(s)
     sys.stdout.flush()
 
-def clear():
-    write(79*" "+"\r")
+def write_err(s):
+    sys.stderr.write(s)
+    sys.stderr.flush()
+
+def clear_err():
+    write_err(79*" "+"\r")
 
 def write_fileline(prefix, filename):
-    write("%s %s\n" % (prefix, format_file(filename)))
+    write_out("%s %s\n" % (prefix, format_file(filename)))
 
 def get_hash(idx, data):
     m = hashlib.md5()
@@ -83,7 +87,7 @@ def get_chunk(offset, length, filename):
             BYTES_READ += ln
             return ln, data
     except IOError, e:
-        write("%s\n" % e)
+        write_out("%s\n" % e)
         return 0, ""
 
 def short_name(lst):
@@ -109,7 +113,7 @@ def compute(pattern=None, lst=None):
     offsets[0] = {}
     key = get_hash(0, "")
 
-    write("Building file list..\r")
+    write_err("Building file list..\r")
     offsets[0][key] = get_filelist(pattern=pattern, lst=lst)
 
     offsets_keys = offsets.keys()
@@ -131,7 +135,7 @@ def compute(pattern=None, lst=None):
                        len(rs),
                        format_size(readsize)
                       )).ljust(79)
-                write("%s\r" % s)
+                write_err("%s\r" % s)
                 if ln == 0:
                     record.eof = True
                 else:
@@ -153,7 +157,7 @@ def compute(pattern=None, lst=None):
                 if new_hash not in offsets[new_offset]:
                     offsets[new_offset][new_hash] = []
                 offsets[new_offset][new_hash].append(r)
-    clear() # terminate offset output
+    clear_err() # terminate offset output
 
     offsets_keys = offsets.keys()
     offsets_keys.sort(reverse=True)
@@ -190,13 +194,13 @@ def main(pattern=None, lst=None):
         q_dupe = []
 
         if zerosized:
-            write("Empty files:\n")
+            write_out("Empty files:\n")
             for f in zerosized: 
                 q_zero.append(f)
                 write_fileline(kill, f)
 
         if incompletes:
-            write("Incompletes:\n")
+            write_out("Incompletes:\n")
             for (idx, (f, fs)) in enumerate(incompletes.items()):
                 fs.append(f)
                 fs = rev_file_size(fs)
@@ -207,10 +211,10 @@ def main(pattern=None, lst=None):
                         prefix = kill
                     write_fileline(prefix, f)
                 if idx < len(incompletes) - 1:
-                    write('\n')
+                    write_out('\n')
 
         if duplicates:
-            write("Duplicates:\n")
+            write_out("Duplicates:\n")
             for (idx, (f, fs)) in enumerate(duplicates.items()):
                 fs.append(f)
                 fs = short_name(fs)
@@ -221,9 +225,10 @@ def main(pattern=None, lst=None):
                         prefix = kill
                     write_fileline(prefix, f)
                 if idx < len(duplicates) - 1:
-                    write('\n')
+                    write_out('\n')
 
-        inp = raw_input("Kill files? (all/empty/incompletes/duplicates) [a/e/i/d/N] ")
+        write_err("Kill files? (all/empty/incompletes/duplicates) [a/e/i/d/N] ")
+        inp = raw_input()
 
         if "e" in inp or "a" in inp:
             for f in q_zero: os.unlink(f)
@@ -236,7 +241,7 @@ if __name__ == "__main__":
     pat = '*'
     if len(sys.argv) > 1:
         if sys.argv[1] == "-h":
-            write("Usage:  %s ['<glob pattern>'|--file <file>]\n" %
+            write_err("Usage:  %s ['<glob pattern>'|--file <file>]\n" %
                   os.path.basename(sys.argv[0]))
             sys.exit(2)
         elif sys.argv[1] == "--file":
