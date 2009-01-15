@@ -5,6 +5,38 @@
 #
 # <desc> Kill duplicate files, finding partial files as well </desc>
 #
+# <usage>
+# Performs n:n comparison of files through md5 hashing and heavy use of
+# hashtables.
+# Execute with wildcard, or input file containing file names to check.
+#
+# Dashboard reports progress:
+# 176.1 KB | Offs   0.0  B | Buck 1/1 | File 193868/600084 | Rs   1.0  B
+#
+# Fields are:
+# 1) total bytes read
+# 2) current offset of reading
+# 3) current number of buckets
+# 4) file/files in this bucket
+# 5) readsize at this offset
+#
+# The method:
+# 1) Scan all files, find smallest
+# 2) Read `read size` amount of bytes, equal to remaining size of smallest file,
+# or at most CHUNK size, from all files into `records`
+# 3) Hash all records, use hashes as keys into offsets[current_offset] dict
+# 4) Files in same bucket are known to be equal up to this offset
+# 5) Continue until at least two files remain that are still equal at all
+# offsets
+# 6) Equal files are either a duplicate case (if they are the same size), or
+# one is partial relative to the other (if not the same size)
+#
+# Memory consumption should not exceed files_in_bucket * read_size
+#
+# Adaptable to file changes; will read all files until eof regardless of
+# filesize recorded on startup
+# </usage>
+#
 # revision 3 - Sort by smallest size before reading files in bucket
 # revision 2 - Add dashboard display
 # revision 1 - Add total byte count
@@ -167,7 +199,7 @@ def compute(pattern=None, lst=None):
                     if ln < readsize:
                         readsize = ln
                     reads.append(r)
-            
+
             if reads:
                 new_offset = offset+readsize
                 if new_offset not in offsets:
