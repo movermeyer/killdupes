@@ -183,14 +183,14 @@ def compute(pattern=None, lst=None):
             for (rid, record) in enumerate(rs):
                 ln, data = get_chunk(offset, readsize, record.fileobj.name)
                 s = ("%s | Offs %s | Buck %s/%s | File %s/%s | Rs %s" % 
-                      (format_size(BYTES_READ),
-                       format_size(offset),
-                       hid+1,
-                       buckets,
-                       rid+1,
-                       len(rs),
-                       format_size(readsize)
-                      )).ljust(79)
+                     (format_size(BYTES_READ),
+                      format_size(offset),
+                      hid+1,
+                      buckets,
+                      rid+1,
+                      len(rs),
+                      format_size(readsize)
+                     )).ljust(79)
                 write_err("%s\r" % s)
                 if ln == 0:
                     record.eof = True
@@ -200,6 +200,7 @@ def compute(pattern=None, lst=None):
                         readsize = ln
                     reads.append(r)
 
+
             if reads:
                 new_offset = offset+readsize
                 if new_offset not in offsets:
@@ -207,7 +208,17 @@ def compute(pattern=None, lst=None):
                     offsets_keys.append(new_offset)
                     offsets_keys.sort()
 
-            for r in reads:
+            for (ri, r) in enumerate(reads):
+                # print update
+                s = ("%s | Offs %s | Buck %s/%s | Hashing %s/%s" %
+                     (format_size(BYTES_READ),
+                      format_size(offset),
+                      hid+1,
+                      buckets,
+                      ri,
+                      len(reads))).ljust(79)
+                write_err("%s\r" % s)
+            
                 new_hash = get_hash(new_offset, hash+r.data[:readsize])
                 r.data = None
                 if new_hash not in offsets[new_offset]:
