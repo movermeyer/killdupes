@@ -32,6 +32,14 @@ The algorithm adapts to file changes; it will read all files until eof regardles
 of the filesize as recorded at startup.
 
 
+Installation
+------------
+
+.. code:: bash
+
+    $ pip install killdupes
+
+
 Usage
 -----
 
