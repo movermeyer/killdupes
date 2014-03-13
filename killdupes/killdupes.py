@@ -134,7 +134,10 @@ def get_chunk(offset, length, filename):
 
 
 def short_name(lst):
-    lst.sort(cmp=lambda x, y: cmp((len(x.name), x.name), (len(y.name), y.name)))
+    lst.sort(cmp=lambda x, y: cmp(
+        (len(x.name), x.name),
+        (len(y.name), y.name)
+    ))
     return lst
 
 
@@ -162,10 +165,12 @@ def compute(pattern=None, lst=None):
 
     offsets_keys = offsets.keys()
     for offset in offsets_keys:
-        offset_hashes = [(h, r) for (h, r) in offsets[offset].items() if len(r) > 1]
+        offset_hashes = [(h, r) for (h, r) in
+                         offsets[offset].items() if len(r) > 1]
         buckets = len(offset_hashes)
         for (hid, (hash, rs)) in enumerate(offset_hashes):
-            rs = rec_file_size(rs)  # sort by shortest to not read redundant data
+            # sort by shortest to not read redundant data
+            rs = rec_file_size(rs)
             reads = []
             readsize = CHUNK
             for (rid, record) in enumerate(rs):
