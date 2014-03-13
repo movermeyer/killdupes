@@ -50,10 +50,11 @@ import sys
 import time
 
 
-CHUNK = 1024*100
+CHUNK = 1024 * 100
 BYTES_READ = 0
 
-_units = { 0:" B", 1:"KB", 2:"MB", 3:"GB", 4:"TB", 5:"PB", 6:"EB", 7:"ZB" }
+_units = {0: " B", 1: "KB", 2: "MB", 3: "GB", 4: "TB", 5: "PB", 6: "EB", 7: "ZB"}
+
 
 class File(object):
     def __init__(self, filename):
@@ -64,8 +65,9 @@ class File(object):
             st = os.stat(self.name)
             self.mtime = st.st_mtime
             self.size = st.st_size
-        except e:
+        except Exception as e:
             write_out("%s\n" % e)
+
 
 class Record(object):
     def __init__(self, fileobj, data=None, eof=False):
@@ -73,8 +75,9 @@ class Record(object):
         self.data = data
         self.eof = eof
 
+
 def format_size(size):
-    if size == None:
+    if size is None:
         size = -1
 
     c = 0
@@ -85,8 +88,10 @@ def format_size(size):
     u = "%s" % _units[c]
     return r.rjust(5) + " " + u.ljust(2)
 
+
 def format_date(date):
     return time.strftime("%d.%m.%y %H:%M:%S", time.gmtime(date))
+
 
 def format_file(fileobj):
     size = format_size(fileobj.size)
@@ -101,16 +106,20 @@ def format_file(fileobj):
         write_out("%s\n" % e)
     return ("%s  %s  %s" % (size, format_date(fileobj.mtime), fileobj.name))
 
+
 def write_out(s):
     sys.stdout.write(s)
     sys.stdout.flush()
+
 
 def write_err(s):
     sys.stderr.write(s)
     sys.stderr.flush()
 
+
 def clear_err():
-    write_err(79*" "+"\r")
+    write_err(79 * " " + "\r")
+
 
 def delete(filename):
     try:
@@ -118,13 +127,16 @@ def delete(filename):
     except OSError, e:
         write_out("%s\n" % e)
 
+
 def write_fileline(prefix, fileobj):
     write_out("%s %s\n" % (prefix, format_file(fileobj)))
+
 
 def get_hash(idx, data):
     m = hashlib.md5()
     m.update(str(idx) + data)
     return m.hexdigest()
+
 
 def get_filelist(pattern=None, lst=None):
     files = []
@@ -135,10 +147,11 @@ def get_filelist(pattern=None, lst=None):
             files.append(Record(File(filename)))
     return files
 
+
 def get_chunk(offset, length, filename):
     try:
         with open(filename, 'r') as f:
-            f.seek(max(offset,0))
+            f.seek(max(offset, 0))
             data = f.read(length)
             ln = len(data)
             global BYTES_READ
@@ -148,17 +161,21 @@ def get_chunk(offset, length, filename):
         write_out("%s\n" % e)
         return 0, ""
 
+
 def short_name(lst):
     lst.sort(cmp=lambda x, y: cmp((len(x.name), x.name), (len(y.name), y.name)))
     return lst
+
 
 def rev_file_size(lst):
     lst.sort(reverse=True, cmp=lambda x, y: cmp(x.size, y.size))
     return lst
 
+
 def rec_file_size(lst):
     lst.sort(cmp=lambda x, y: cmp(x.fileobj.size, y.fileobj.size))
     return lst
+
 
 def compute(pattern=None, lst=None):
     zerosized = []
@@ -174,20 +191,20 @@ def compute(pattern=None, lst=None):
 
     offsets_keys = offsets.keys()
     for offset in offsets_keys:
-        offset_hashes = [(h,r) for (h,r) in offsets[offset].items() if len(r) > 1]
+        offset_hashes = [(h, r) for (h, r) in offsets[offset].items() if len(r) > 1]
         buckets = len(offset_hashes)
         for (hid, (hash, rs)) in enumerate(offset_hashes):
-            rs = rec_file_size(rs) # sort by shortest to not read redundant data
+            rs = rec_file_size(rs)  # sort by shortest to not read redundant data
             reads = []
             readsize = CHUNK
             for (rid, record) in enumerate(rs):
                 ln, data = get_chunk(offset, readsize, record.fileobj.name)
-                s = ("%s | Offs %s | Buck %s/%s | File %s/%s | Rs %s" % 
+                s = ("%s | Offs %s | Buck %s/%s | File %s/%s | Rs %s" %
                      (format_size(BYTES_READ),
                       format_size(offset),
-                      hid+1,
+                      hid + 1,
                       buckets,
-                      rid+1,
+                      rid + 1,
                       len(rs),
                       format_size(readsize)
                      )).ljust(79)
@@ -202,7 +219,7 @@ def compute(pattern=None, lst=None):
 
 
             if reads:
-                new_offset = offset+readsize
+                new_offset = offset + readsize
                 if new_offset not in offsets:
                     offsets[new_offset] = {}
                     offsets_keys.append(new_offset)
@@ -213,18 +230,18 @@ def compute(pattern=None, lst=None):
                 s = ("%s | Offs %s | Buck %s/%s | Hashing %s/%s" %
                      (format_size(BYTES_READ),
                       format_size(offset),
-                      hid+1,
+                      hid + 1,
                       buckets,
                       ri,
                       len(reads))).ljust(79)
                 write_err("%s\r" % s)
-            
-                new_hash = get_hash(new_offset, hash+r.data[:readsize])
+
+                new_hash = get_hash(new_offset, hash + r.data[:readsize])
                 r.data = None
                 if new_hash not in offsets[new_offset]:
                     offsets[new_offset][new_hash] = []
                 offsets[new_offset][new_hash].append(r)
-    clear_err() # terminate offset output
+    clear_err()  # terminate offset output
 
     offsets_keys = offsets.keys()
     offsets_keys.sort(reverse=True)
@@ -241,7 +258,7 @@ def compute(pattern=None, lst=None):
                         duplicates[eofs[0].fileobj.name] = \
                             [r.fileobj for r in eofs]
                     if len(eofs) >= 1 and len(n_eofs) >= 1:
-                        largest = rev_file_size([r.fileobj for r in n_eofs])[0] 
+                        largest = rev_file_size([r.fileobj for r in n_eofs])[0]
                         key = largest.name
                         if not key in incompletes:
                             incompletes[key] = [largest]
@@ -251,6 +268,7 @@ def compute(pattern=None, lst=None):
 
     return zerosized, incompletes, duplicates
 
+
 def main(pattern=None, lst=None):
     zerosized, incompletes, duplicates = compute(pattern=pattern, lst=lst)
     if zerosized or incompletes or duplicates:
@@ -259,12 +277,12 @@ def main(pattern=None, lst=None):
         keep = " = "
 
         q_zero = []
-        q_inc  = []
+        q_inc = []
         q_dupe = []
 
         if zerosized:
             write_out("Empty files:\n")
-            for fileobj in zerosized: 
+            for fileobj in zerosized:
                 q_zero.append(fileobj)
                 write_fileline(kill, fileobj)
 
@@ -298,18 +316,21 @@ def main(pattern=None, lst=None):
         inp = raw_input()
 
         if "e" in inp or "a" in inp:
-            for fileobj in q_zero: delete(fileobj.name)
+            for fileobj in q_zero:
+                delete(fileobj.name)
         if "i" in inp or "a" in inp:
-            for fileobj in q_inc: delete(fileobj.name)
+            for fileobj in q_inc:
+                delete(fileobj.name)
         if "d" in inp or "a" in inp:
-            for fileobj in q_dupe: delete(fileobj.name)
+            for fileobj in q_dupe:
+                delete(fileobj.name)
 
 if __name__ == "__main__":
     pat = '*'
     if len(sys.argv) > 1:
         if sys.argv[1] == "-h":
             write_err("Usage:  %s ['<glob pattern>'|--file <file>]\n" %
-                  os.path.basename(sys.argv[0]))
+                      os.path.basename(sys.argv[0]))
             sys.exit(2)
         elif sys.argv[1] == "--file":
             lst = open(sys.argv[2], 'r').readlines()
