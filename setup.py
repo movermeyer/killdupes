@@ -13,7 +13,7 @@ setup(
     url='https://github.com/numerodix/killdupes',
 
     packages=find_packages('.'),
-    package_dir = {'': '.'},
+    package_dir={'': '.'},
 
     # don't install as zipped egg
     zip_safe=False,

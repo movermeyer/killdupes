@@ -15,7 +15,16 @@ import time
 CHUNK = 1024 * 100
 BYTES_READ = 0
 
-_units = {0: " B", 1: "KB", 2: "MB", 3: "GB", 4: "TB", 5: "PB", 6: "EB", 7: "ZB"}
+_units = [
+    " B",
+    "KB",
+    "MB",
+    "GB",
+    "TB",
+    "PB",
+    "EB",
+    "ZB",
+]
 
 
 class File(object):
