@@ -182,8 +182,7 @@ def compute(pattern=None, lst=None):
                       buckets,
                       rid + 1,
                       len(rs),
-                      format_size(readsize)
-                     )).ljust(79)
+                      format_size(readsize))).ljust(79)
                 write_err("%s\r" % s)
                 if ln == 0:
                     record.eof = True
@@ -300,6 +299,8 @@ def main(pattern=None, lst=None):
         if "d" in inp or "a" in inp:
             for fileobj in q_dupe:
                 delete(fileobj.name)
+
+
 
 if __name__ == "__main__":
     pat = '*'
