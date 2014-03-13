@@ -1,6 +1,13 @@
 killdupes
 =========
 
+.. image:: https://badge.fury.io/py/killdupes.png
+        :target: https://badge.fury.io/py/killdupes
+
+.. image:: https://pypip.in/wheel/killdupes/badge.png
+    :target: https://pypi.python.org/pypi/killdupes/
+
+
 Python version support: CPython 2.6, 2.7, 3.2, 3.3 and PyPy.
 
 
