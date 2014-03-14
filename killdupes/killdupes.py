@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Author: Martin Matusiak <numerodix@gmail.com>
-# Licensed under the GNU Public License, version 3.
+# Licensed under the GNU Public License, version 2.
 
 from __future__ import with_statement
 
