@@ -4,6 +4,9 @@ killdupes
 .. image:: https://badge.fury.io/py/killdupes.png
         :target: https://badge.fury.io/py/killdupes
 
+.. image:: https://travis-ci.org/numerodix/killdupes.png?branch=master
+    :target: https://travis-ci.org/numerodix/killdupes
+
 .. image:: https://pypip.in/wheel/killdupes/badge.png
     :target: https://pypi.python.org/pypi/killdupes/
 
