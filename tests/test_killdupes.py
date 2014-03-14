@@ -20,4 +20,4 @@ def test_killdupes():
     dupes = extract(dupes)
 
     assert empty == ['empty']
-    assert dupes == ['full', 'full2']
+    assert sorted(dupes) == ['full', 'full2']
