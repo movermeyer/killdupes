@@ -12,7 +12,7 @@ def test_killdupes():
 
     extract = lambda lst: [os.path.basename(i.name) for i in lst]
 
-    partial = [v for v in partial.values()][0]
+    partial = [v for v in partial.values()][0][1:]
     dupes = [v for v in dupes.values()][0]
 
     empty = extract(empty)
@@ -20,4 +20,5 @@ def test_killdupes():
     dupes = extract(dupes)
 
     assert empty == ['empty']
+    assert partial == ['partial']
     assert sorted(dupes) == ['full', 'full2']

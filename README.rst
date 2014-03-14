@@ -20,8 +20,8 @@ How it works
 ``killdupes`` scans your filesystem to find duplicate files, partial files
 and empty files.
 
-Performs n:n comparison of files through md5 hashing and heavy use of
-hashtables.
+It performs n:n comparison of files through md5 hashing and heavy use of
+dictionaries.
 Execute with wildcard, or input file containing file names to check.
 
 The method:
@@ -36,7 +36,7 @@ The method:
 6. Equal files are either a duplicate case (if they are the same size), or
    one is partial relative to the other (if not the same size).
 
-Memory consumption should not exceed ``files_in_bucket * read_size``
+Memory consumption should not exceed ``files_in_bucket * read_size``.
 
 The algorithm adapts to file changes; it will read all files until eof regardless
 of the filesize as recorded at startup.
