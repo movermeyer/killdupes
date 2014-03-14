@@ -55,8 +55,18 @@ Usage
 
 .. code:: bash
 
-    $ killdupes.py *
+    $ killdupes.py '*'
     176.1 KB | Offs   0.0  B | Buck 1/1 | File 193868/600084 | Rs   1.0  B
+
+    Empty files:
+    X    0.0  B  14.03.14 17:39:48  tests/samples/empty
+    Incompletes:
+    =    2.0  B  14.03.14 18:17:43  tests/samples/full
+    X    1.0  B  14.03.14 18:17:26  tests/samples/partial
+    Duplicates:
+    =    2.0  B  14.03.14 18:17:43  tests/samples/full
+    X    2.0  B  14.03.14 18:17:37  tests/samples/full2
+    Kill files? (all/empty/incompletes/duplicates) [a/e/i/d/N]
 
 The dashboard fields:
 
