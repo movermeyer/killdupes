@@ -12,8 +12,8 @@ def test_killdupes():
 
     extract = lambda lst: [os.path.basename(i.name) for i in lst]
 
-    partial = partial.values()[0]
-    dupes = dupes.values()[0]
+    partial = [v for v in partial.values()][0]
+    dupes = [v for v in dupes.values()][0]
 
     empty = extract(empty)
     partial = extract(partial)

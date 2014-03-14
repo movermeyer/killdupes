@@ -105,9 +105,9 @@ def write_fileline(prefix, fileobj):
 
 def get_hash(idx, data):
     m = hashlib.md5()
-    data = str(idx) + data
-    m.update(data.encode('utf8'))
-    return m.hexdigest()
+    data = bytes(idx) + data
+    m.update(data)
+    return m.hexdigest().encode('ascii')
 
 
 def get_filelist(pattern=None, lst=None):
@@ -156,7 +156,7 @@ def compute(pattern=None, lst=None):
 
     offsets = {}
     offsets[0] = {}
-    key = get_hash(0, "")
+    key = get_hash(0, b"")
 
     write_err("Building file list..\r")
     offsets[0][key] = get_filelist(pattern=pattern, lst=lst)
@@ -216,7 +216,7 @@ def compute(pattern=None, lst=None):
                 offsets[new_offset][new_hash].append(r)
     clear_err()  # terminate offset output
 
-    offsets_keys = offsets.keys()
+    offsets_keys = [k for k in offsets.keys()]
     offsets_keys.sort(reverse=True)
     for offset in offsets_keys:
         offset_hashes = offsets[offset]
