@@ -121,7 +121,7 @@ def get_filelist(pattern=None, lst=None):
 
 def get_chunk(offset, length, filename):
     try:
-        with open(filename, 'r') as f:
+        with open(filename, 'rb') as f:
             f.seek(max(offset, 0))
             data = f.read(length)
             ln = len(data)
