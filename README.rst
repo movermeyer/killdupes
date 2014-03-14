@@ -66,7 +66,8 @@ Usage
     X    2.0  B  14.03.14 18:17:37  tests/samples/full2
     Kill files? (all/empty/incompletes/duplicates) [a/e/i/d/N]
 
-If there are many files to scan it will display a progress dashboard:
+If there are many files to scan it will display a progress dashboard while
+working:
 
 .. code:: bash
 
