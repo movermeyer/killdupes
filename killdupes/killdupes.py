@@ -287,7 +287,8 @@ def main(pattern=None, lst=None):
                 if idx < len(duplicates) - 1:
                     write_out('\n')
 
-        write_err("Kill files? (all/empty/incompletes/duplicates) [a/e/i/d/N] ")
+        prompt = "Kill files? (all/empty/incompletes/duplicates) [a/e/i/d/N] "
+        write_err(prompt)
         inp = raw_input()
 
         if "e" in inp or "a" in inp:
