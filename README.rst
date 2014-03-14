@@ -55,7 +55,7 @@ Usage
 
 .. code:: bash
 
-    $ killdupes.py '*'
+    $ killdupes.py 'tests/samples/*'
     Empty files:
     X    0.0  B  14.03.14 17:39:48  tests/samples/empty
     Incompletes:
