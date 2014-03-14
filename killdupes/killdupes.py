@@ -105,7 +105,8 @@ def write_fileline(prefix, fileobj):
 
 def get_hash(idx, data):
     m = hashlib.md5()
-    m.update(str(idx) + data)
+    data = str(idx) + data
+    m.update(data.encode('utf8'))
     return m.hexdigest()
 
 
