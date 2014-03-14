@@ -20,4 +20,5 @@ def test_killdupes():
     dupes = extract(dupes)
 
     assert empty == ['empty']
+    assert partial == ['partial']
     assert sorted(dupes) == ['full', 'full2']
