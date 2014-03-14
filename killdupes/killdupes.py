@@ -135,20 +135,17 @@ def get_chunk(offset, length, filename):
 
 
 def short_name(lst):
-    lst.sort(cmp=lambda x, y: cmp(
-        (len(x.name), x.name),
-        (len(y.name), y.name)
-    ))
+    lst.sort(key=lambda x: (len(x.name), x.name))
     return lst
 
 
 def rev_file_size(lst):
-    lst.sort(reverse=True, cmp=lambda x, y: cmp(x.size, y.size))
+    lst.sort(reverse=True, key=lambda x: x.size)
     return lst
 
 
 def rec_file_size(lst):
-    lst.sort(cmp=lambda x, y: cmp(x.fileobj.size, y.fileobj.size))
+    lst.sort(key=lambda x: x.fileobj.size)
     return lst
 
 
