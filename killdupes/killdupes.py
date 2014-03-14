@@ -3,8 +3,8 @@
 # Author: Martin Matusiak <numerodix@gmail.com>
 # Licensed under the GNU Public License, version 3.
 
-
 from __future__ import with_statement
+
 import glob
 import hashlib
 import os
@@ -161,7 +161,7 @@ def compute(pattern=None, lst=None):
     write_err("Building file list..\r")
     offsets[0][key] = get_filelist(pattern=pattern, lst=lst)
 
-    offsets_keys = offsets.keys()
+    offsets_keys = [k for k in offsets.keys()]
     for offset in offsets_keys:
         offset_hashes = [(h, r) for (h, r) in
                          offsets[offset].items() if len(r) > 1]
