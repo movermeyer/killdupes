@@ -27,6 +27,12 @@ _units = [
 ]
 
 
+try:
+    raw_input
+except NameError:
+    raw_input = input
+
+
 class File(object):
     def __init__(self, filename):
         self.name = filename
