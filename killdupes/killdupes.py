@@ -73,7 +73,7 @@ def format_file(fileobj):
             size += "-" + format_size(diff_abs).strip()
         elif diff > 0:
             size += "+" + format_size(diff_abs).strip()
-    except OSError, e:
+    except OSError as e:
         write_out("%s\n" % e)
     return ("%s  %s  %s" % (size, format_date(fileobj.mtime), fileobj.name))
 
@@ -95,7 +95,7 @@ def clear_err():
 def delete(filename):
     try:
         os.unlink(filename)
-    except OSError, e:
+    except OSError as e:
         write_out("%s\n" % e)
 
 
@@ -128,7 +128,7 @@ def get_chunk(offset, length, filename):
             global BYTES_READ
             BYTES_READ += ln
             return ln, data
-    except IOError, e:
+    except IOError as e:
         write_out("%s\n" % e)
         return 0, ""
 
