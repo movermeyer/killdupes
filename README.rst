@@ -7,10 +7,10 @@ killdupes
 .. image:: https://travis-ci.org/numerodix/killdupes.png?branch=master
     :target: https://travis-ci.org/numerodix/killdupes
 
-.. image:: https://pypip.in/wheel/killdupes/badge.png
+.. image:: https://img.shields.io/pypi/wheel/killdupes.svg
     :target: https://pypi.python.org/pypi/killdupes/
 
-.. image:: https://pypip.in/license/killdupes/badge.png
+.. image:: https://img.shields.io/pypi/l/killdupes.svg
         :target: https://pypi.python.org/pypi/killdupes/
 
 
